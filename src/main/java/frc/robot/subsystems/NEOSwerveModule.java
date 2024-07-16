@@ -23,7 +23,7 @@ import frc.robot.utilities.OnboardModuleState;
 import frc.robot.utilities.constants.Constants;
 import frc.robot.utilities.constants.SwerveModuleConstants;
 
-public class SwerveModule {
+public class NEOSwerveModule {
     public int moduleNumber;
     public Rotation2d lastAngle;
     public Rotation2d angleOffset;
@@ -43,7 +43,7 @@ public class SwerveModule {
 
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.ModuleConstants.driveKS, Constants.ModuleConstants.driveKV, Constants.ModuleConstants.driveKA);
 
-    public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants) {
+    public NEOSwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants) {
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
 
