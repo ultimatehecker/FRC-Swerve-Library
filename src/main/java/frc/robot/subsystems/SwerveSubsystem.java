@@ -1,22 +1,28 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.filter.SlewRateLimiter;
+
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.utilities.constants.Constants;
 
 public class SwerveSubsystem extends SubsystemBase {
     private final AHRS gyroscope;
 
     private SwerveDriveOdometry swerveOdometry;
-    private SwerveModule[] swerveModules;
+    private NEOSwerveModule[] swerveModules;
     private SwerveDriveKinematics driveKinematics;
 
     private SlewRateLimiter translationLimiter = new SlewRateLimiter(2.9);
@@ -29,11 +35,11 @@ public class SwerveSubsystem extends SubsystemBase {
         gyroscope = new AHRS(SPI.Port.kMXP);
         resetHeading();
 
-        swerveModules = new SwerveModule[] {
-                new SwerveModule(0, Constants.ModuleConstants.FrontLeftModule.constants),
-                new SwerveModule(1, Constants.ModuleConstants.FrontRightModule.constants),
-                new SwerveModule(2, Constants.ModuleConstants.BackLeftModule.constants),
-                new SwerveModule(3, Constants.ModuleConstants.BackRightModule.constants)
+        swerveModules = new NEOSwerveModule[] {
+                new NEOSwerveModule(0, Constants.ModuleConstants.FrontLeftModule.constants),
+                new NEOSwerveModule(1, Constants.ModuleConstants.FrontRightModule.constants),
+                new NEOSwerveModule(2, Constants.ModuleConstants.BackLeftModule.constants),
+                new NEOSwerveModule(3, Constants.ModuleConstants.BackRightModule.constants)
         };
 
         driveKinematics = Constants.SwerveConstants.SwerveKinematics;
@@ -48,7 +54,7 @@ public class SwerveSubsystem extends SubsystemBase {
         );
 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.PhysicalMaxTranslationSpeed);
-        for(SwerveModule module : swerveModules) {
+        for(NEOSwerveModule module : swerveModules) {
             module.setDesiredState(swerveModuleStates[module.moduleNumber], false);
         }
     }
@@ -61,7 +67,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveModuleState[] getSwerveModuleStates() {
         SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
-        for(SwerveModule module : swerveModules) {
+        for(NEOSwerveModule module : swerveModules) {
             swerveModuleStates[module.moduleNumber] = module.getSwerveModuleState();
         }
 
@@ -70,7 +76,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveModulePosition[] getSwerveModulePositions() {
         SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[4];
-        for(SwerveModule module : swerveModules) {
+        for(NEOSwerveModule module : swerveModules) {
             swerveModulePositions[module.moduleNumber] = module.getSwerveModulePosition();
         }
 
@@ -83,7 +89,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setSwerveModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.SwerveConstants.PhysicalMaxTranslationSpeed);
-        for(SwerveModule swerveModule : swerveModules) {
+        for(NEOSwerveModule swerveModule : swerveModules) {
             swerveModule.setDesiredState(desiredStates[swerveModule.moduleNumber], false);
         }
     }
@@ -109,7 +115,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void resetModulesToAbsolute() {
-        for(SwerveModule swerveModule : swerveModules) {
+        for(NEOSwerveModule swerveModule : swerveModules) {
             swerveModule.resetToAbsolute();
         }
     }
@@ -119,7 +125,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        for(SwerveModule swerveModule : swerveModules) {
+        for(NEOSwerveModule swerveModule : swerveModules) {
             swerveModule.stop();
         }
     }
