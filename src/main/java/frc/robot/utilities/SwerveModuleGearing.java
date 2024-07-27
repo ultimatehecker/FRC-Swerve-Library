@@ -14,9 +14,9 @@ public enum SwerveModuleGearing {
     MK4_L2(GearRatio.MK4_L2, false, GearRatio.MK4_STEERING, false),
     MK4_L3(GearRatio.MK4_L3, false, GearRatio.MK4_STEERING, false),
     MK4_L4(GearRatio.MK4_L4, false, GearRatio.MK4_STEERING, false),
-    MK4I_L1(GearRatio.MK4I_L1, false, GearRatio.MK4I_STEERING, false),
-    MK4I_L2(GearRatio.MK4I_L2, false, GearRatio.MK4I_STEERING, false),
-    MK4I_L3(GearRatio.MK4I_L3, false, GearRatio.MK4I_STEERING, false);
+    MK4I_L1(GearRatio.MK4I_L1, false, GearRatio.MK4I_STEERING, true),
+    MK4I_L2(GearRatio.MK4I_L2, false, GearRatio.MK4I_STEERING, true),
+    MK4I_L3(GearRatio.MK4I_L3, false, GearRatio.MK4I_STEERING, true);
 
     private double driveReduction;
     private boolean driveInverted;

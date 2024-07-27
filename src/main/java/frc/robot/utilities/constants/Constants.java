@@ -1,11 +1,14 @@
 package frc.robot.utilities.constants;
 
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.utilities.ModuleConfiguration;
+import frc.robot.utilities.SwerveModuleGearing;
 
 public class Constants {
     public static final class ModuleConstants {
@@ -13,8 +16,17 @@ public class Constants {
         public static final double voltageCompensation = 12.0;
 
         /* Module Current Limiting */
-        public static final int steeringCurrentLimit = 20;
-        public static final int driveCurrentLimit = 40;
+        public static final int steeringCurrentLimit = 25;
+        public static final int steeringCurrentThreshold = 40;
+        public static final double steeringCurrentThresholdTime = 0.1;
+        public static final boolean steeringEnableCurrentLimit = true;
+
+        public static final int driveCurrentLimitNEO = 40;
+        public static final int driveCurrentLimitCTRE = 35;
+        public static final int driveCurrentThreshold = 60;
+        public static final double driveCurrentThresholdTime = 0.1;
+        public static final boolean driveEnableCurrentLimit = true;
+
         public static final int maximumCurrentLimit = 60;
 
         /* PID Profiling. Used to correct position errors */
@@ -30,6 +42,10 @@ public class Constants {
         public static final double driveKS = 0.667;
         public static final double driveKV = 2.44;
         public static final double driveKA = 0.27;
+
+        /* These values are used by the drive falcon to ramp in open loop and closed loop driving. A small open loop ramp (0.25) helps with tread wear, tipping, etc */
+        public static final double openLoopRamp = 0.25;
+        public static final double closedLoopRamp = 0.0;
 
         /* Front Left Module - Module 0 */
         public static final class FrontLeftModule {
@@ -69,6 +85,12 @@ public class Constants {
     }
 
     public static class SwerveConstants {
+        /* Motor Hardware being use to use the right code */
+        public static enum MotorHardware { NEO, TalonFX }
+        public static MotorHardware SwerveHardware = MotorHardware.NEO; // Change this to the motor hardware you are using
+        public static SwerveModuleGearing ModuleGearing = SwerveModuleGearing.MK3_STANDARD; // Change this to the module gearing you are using
+        public static ModuleConfiguration SwerveModule = ModuleConfiguration.SwerveDriveSpecialities.MK3.NEO(ModuleGearing.getDriveReduction()); // Change this to the motor configuration you are using
+
         /* Information of Drivetrain to perform kinematics */
         public static final double TrackWidth = Units.inchesToMeters(28); // Distance from center of the right wheels to center on the left wheels
         public static final double WheelBase = Units.inchesToMeters(28); // Distance from the center of the front wheels to center on the back wheels
@@ -103,13 +125,13 @@ public class Constants {
         public static final double headingkD = 0.00; // Derivative: Considers the derivative of the change in error and impacts the output
 
         /* Neutral Modes */
-        public static final IdleMode activeNeutralMode = IdleMode.kBrake; // What to do when neutral power is applied to the drivetrain while running
-        public static final IdleMode disabledNeutralMode = IdleMode.kCoast; // What to do when neutral power is applied to the drivetrain while disabled
+        public static final boolean activeNeutralMode = true; // What to do when neutral power is applied to the drivetrain while running
+        public static final boolean disabledNeutralMode = false; // What to do when neutral power is applied to the drivetrain while disabled
 
         /* Motor and Encoder Inversions (should all be CCW+) */
-        public static final boolean driveInverted = false;
-        public static final boolean steeringInverted = false;
-        public static final boolean swerveEncoderInverted = false;
+        public static final boolean driveInverted = SwerveModule.driveMotorInverted;
+        public static final boolean steeringInverted = SwerveModule.angleMotorInverted;
+        public static final boolean swerveEncoderInverted = SwerveModule.cancoderInvert;
         public static final boolean gyroscopeInverted = false;
     }
 
