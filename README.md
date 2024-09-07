@@ -1,7 +1,7 @@
 <br />
 <h1>
     <p align="center">
-        <img src="https://github.com/user-attachments/assets/72e32a4f-a451-42e7-9f9b-95c1e4606282" alt="Logo" width="140" height="110">
+        <img src="https://github.com/user-attachments/assets/72e32a4f-a451-42e7-9f9b-95c1e4606282" alt="Logo">
         <br>FRC Swerve Library
     </h1>
 <p align="center">One stop shop to getting a working drivetrain while learning. <br /> </p>
