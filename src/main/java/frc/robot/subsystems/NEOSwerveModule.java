@@ -80,7 +80,7 @@ public class NEOSwerveModule {
         steeringMotor.setSmartCurrentLimit(Constants.ModuleConstants.steeringCurrentLimit);
         steeringMotor.setSecondaryCurrentLimit(Constants.ModuleConstants.maximumCurrentLimit);
         steeringMotor.setInverted(Constants.SwerveConstants.steeringInverted);
-        steeringMotor.setIdleMode(Constants.SwerveConstants.activeNeutralMode);
+        steeringMotor.setIdleMode(Constants.SwerveConstants.disabledNeutralMode ? CANSparkMax.IdleMode.kCoast : CANSparkMax.IdleMode.kBrake);
         steeringEncoder.setPositionConversionFactor(Constants.SwerveConstants.SteeringPositionConversionFactor);
         steeringPIDController.setFeedbackDevice(steeringEncoder);
         steeringPIDController.setP(Constants.ModuleConstants.steeringkP);
@@ -94,10 +94,10 @@ public class NEOSwerveModule {
     private void configureDriveMotor() {
         driveMotor.restoreFactoryDefaults();
         CANSparkMaxUtil.setSparkMaxBusUsage(driveMotor, CANSparkMaxUtil.Usage.kAll);
-        driveMotor.setSmartCurrentLimit(Constants.ModuleConstants.driveCurrentLimit);
+        driveMotor.setSmartCurrentLimit(Constants.ModuleConstants.driveCurrentLimitNEO);
         driveMotor.setSecondaryCurrentLimit(Constants.ModuleConstants.maximumCurrentLimit);
         driveMotor.setInverted(Constants.SwerveConstants.steeringInverted);
-        driveMotor.setIdleMode(Constants.SwerveConstants.activeNeutralMode);
+        driveMotor.setIdleMode(Constants.SwerveConstants.disabledNeutralMode ? CANSparkMax.IdleMode.kCoast : CANSparkMax.IdleMode.kBrake);
         driveEncoder.setPositionConversionFactor(Constants.SwerveConstants.DrivePositionConversionFactor);
         driveEncoder.setVelocityConversionFactor(Constants.SwerveConstants.DriveVelocityConversionFactor);
         drivePIDController.setFeedbackDevice(driveEncoder);
@@ -143,13 +143,13 @@ public class NEOSwerveModule {
     }
 
     public void onDisabled() {
-        driveMotor.setIdleMode(Constants.SwerveConstants.disabledNeutralMode);
-        steeringMotor.setIdleMode(Constants.SwerveConstants.disabledNeutralMode);
+        driveMotor.setIdleMode(Constants.SwerveConstants.disabledNeutralMode ? CANSparkMax.IdleMode.kCoast : CANSparkMax.IdleMode.kBrake);
+        steeringMotor.setIdleMode(Constants.SwerveConstants.disabledNeutralMode ? CANSparkMax.IdleMode.kCoast : CANSparkMax.IdleMode.kBrake);
     }
 
     public void onEnabled() {
-        driveMotor.setIdleMode(Constants.SwerveConstants.activeNeutralMode);
-        steeringMotor.setIdleMode(Constants.SwerveConstants.activeNeutralMode);
+        driveMotor.setIdleMode(Constants.SwerveConstants.activeNeutralMode ? CANSparkMax.IdleMode.kBrake : CANSparkMax.IdleMode.kCoast);
+        steeringMotor.setIdleMode(Constants.SwerveConstants.activeNeutralMode ? CANSparkMax.IdleMode.kBrake : CANSparkMax.IdleMode.kCoast);
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop) {

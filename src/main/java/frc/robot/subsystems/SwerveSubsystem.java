@@ -22,8 +22,9 @@ public class SwerveSubsystem extends SubsystemBase {
     private final AHRS gyroscope;
 
     private SwerveDriveOdometry swerveOdometry;
-    private NEOSwerveModule[] swerveModules;
     private SwerveDriveKinematics driveKinematics;
+
+    private NEOSwerveModule[] swerveModules; // Change this to FXSwerveModule[] if you are using the FXSwerveModule class
 
     private SlewRateLimiter translationLimiter = new SlewRateLimiter(2.9);
     private SlewRateLimiter strafeLimiter = new SlewRateLimiter(2.9);
@@ -35,12 +36,23 @@ public class SwerveSubsystem extends SubsystemBase {
         gyroscope = new AHRS(SPI.Port.kMXP);
         resetHeading();
 
-        swerveModules = new NEOSwerveModule[] {
-                new NEOSwerveModule(0, Constants.ModuleConstants.FrontLeftModule.constants),
-                new NEOSwerveModule(1, Constants.ModuleConstants.FrontRightModule.constants),
-                new NEOSwerveModule(2, Constants.ModuleConstants.BackLeftModule.constants),
-                new NEOSwerveModule(3, Constants.ModuleConstants.BackRightModule.constants)
+        NEOSwerveModule[] swerveModules = new NEOSwerveModule[] {
+            new NEOSwerveModule(0, Constants.ModuleConstants.FrontLeftModule.constants),
+            new NEOSwerveModule(1, Constants.ModuleConstants.FrontRightModule.constants),
+            new NEOSwerveModule(2, Constants.ModuleConstants.BackLeftModule.constants),
+            new NEOSwerveModule(3, Constants.ModuleConstants.BackRightModule.constants)
         };
+
+        /* Uncommet this block and comment the block above to use the FXSwerveModule class instead of the NEOSwerveModule class
+
+        FXSwerveModule[] swerveModules = new FXSwerveModule[] {
+            new FXSwerveModule(0, Constants.ModuleConstants.FrontLeftModule.constants),
+            new FXSwerveModule(1, Constants.ModuleConstants.FrontRightModule.constants),
+            new FXSwerveModule(2, Constants.ModuleConstants.BackLeftModule.constants),
+            new FXSwerveModule(3, Constants.ModuleConstants.BackRightModule.constants)
+        };
+
+        */
 
         driveKinematics = Constants.SwerveConstants.SwerveKinematics;
         swerveOdometry = new SwerveDriveOdometry(driveKinematics, getYawRotation2d(), getSwerveModulePositions());

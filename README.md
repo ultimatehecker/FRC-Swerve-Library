@@ -1,46 +1,46 @@
-# FRC Basic Swerve Library
-A basic swerve library that Minotaur 1369 used during the 2024 season. Although this supports all type's of swerve pods, it was specifically created
-for the MK3 Swerve Modules, but with some adjustments it will work for any other module expects those with unsupported hardware. I do plan on adding
-support for other frameworks, but for now, this will have to do
+<br />
+<h1>
+    <p align="center">
+        <!-- <img src="https://github.com/user-attachments/assets/72e32a4f-a451-42e7-9f9b-95c1e4606282" alt="Logo" width="140" height="110"> -->
+        <br>FRC Swerve Library
+    </h1>
+<p align="center">Python3 script to transfer files in Google Colab 10-50x faster. <br /> </p>
+</p>
+
+<p align="center">
+  <a href="#about-the-project">About The Project</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#configuration">Configuration</a> •
+  <a href="#credits">Credits</a>
+</p>  
+
+<p align="center">
+![screenshot](https://github.com/user-attachments/assets/72e32a4f-a451-42e7-9f9b-95c1e4606282)
+</p>  
+
+## About The Project
+A basic swerve library that Minotaur 1369 used during the 2024 season, adapted so that all teams can use it regardless of hardware. Although this 
+supports any type of swerve modules, it was specifically created for the MK3 and MK4 series swerve modules. Support TalonFX controllers with CANCoders
+as well as NEOs with CANCoders, but the platform is being expanded for all kinds of modules with different hardware configurations.
 
 ## Installation
 Installation is fairly straight forward, since all of the vendoerdeps have been loaded online, there is nothing needed to be downloaded on your end, all
-you need to do is to clone the repository, and make sure that your WPILib is on the latest version, which is version 2024.3.2
+you need to have the latest version of WPILib installed, which as of right now is build 2024.3.2. Once install, simplify clone the repository
+```sh
+git clone https://github.com/ultimatehecker/FRC-Swerve-Library
+```
 
 ## Configuration
-Although this library makes is easier to setup, it isn't as simple as using YAGSL beacuse I don't have the hardware to test all of them, nor do I have
-the time to do it at this moment. This library doesn't have any good starter values, execpt for the NEO motor characterization values. Everything else
-such as PID will have to be tuned manually for the best results
+Although this library makes is easier to setup, it is still a WIP, and updates will be added to furthermore improve the ease of use. There are some important
+settings that you will need to change. If there are any issues, please open a GitHub issue and will address the problem as soon as possible. The settings changes
+needed to make will be located in `src/main/java/frc/robot/utilities/constants/Constants.java` under the `ModuleConstants` and `SwerveConstants` classes.
+- `steeringkP, steeringkI, steeringkD`: These will need to be optimized for your robot, as every robot will have a different weight distribution and center of gravity
+- `drivekP, drivekI, drivekD`: These will also need to be optimized for your robot, as different gearing setups and modules will be effected differently
+- `driveKS, driveKV, driveKA`: For the MK3 and MK4 modules, these constants are tuned fairly accurately, but for other these may need to be tuned
+- `FrontLeftModule, FrontRightModule, BackLeftModule, BackRightModule`: The CAN ID's of your hardware, need to be changed based on values in REV Hardware Client or Pheonix Tuner X
+- `SwerveHardware`: Change to what motors you are using on your modules
+- `ModuleGearing`: Change to the gear ration currently on your modules (contains motor inversions that may not be totally accurate)
+- `TrackWidth, WheelBase`: Change these to the length between the wheels of your modules center to center
 
-Everything to be configured will be done in Constants.java, located in /utilites/constants/Constants. Below is a list of everything needed to be 
-configured in order to get it up and running. For some of the steps below, it might be useful to log some values using SmartDashboard in order to 
-configure them, some should already be there for starters.
-
-Inside ModuleConstants, you will see four class's, one for each module, which has the IDs for the motors, CANCoders, and then the encoder offset. These
-will have to be set to what you have setup on your end. 
-
-For your Neos, in REV Hardware Client, configure each motor to be a Brushless motor with a unique ID between 1-63.Then make sure the numbers match 
-everything insde these four class's  for each module.
-
-For your CANCoder's, you need to open Pheonix Tuner X and make sure each one has a unique ID that is not the same as the other Neo's. You will
-also need to record the absolute encoder offset, which is the position the encoder reads when the wheel is straight. Since these encoders use a 
-polar magnet in order to sense its position, it will not be the same for all four encoders. Once those values are recorded, place them in their
-respective spots. Also with these CANCoder's, do note that you can't flash these devices through code, so you will have to flash them after the 
-code has been deployed to the robot.
-
-Inside the SwerveConstants class, you will need to configure your TrackWidth and WheelBase to be the distance from center of each one of the wheels. Since
-this can be a bit tricky, for beta testing it is alright to leave it as the width and length of your drivetrain, but it will need to be adjusted in order
-to get the best performance
-
-The DriveGearing and SteeringGearing will need to be edited based on the ratio of your swerve module. If you are using Swerve Drive Specialities Modules, the
-steering ratio for the MK3, MK4, MK4i and MK4N are all 12.8:1, so you will not have to worry about this. Although you will need to worry about the Drive Ratio.
-On the MK3 Modules, there were only two ratios, Standard (8.16:1) and Fast (6.86:1). After the MK3s, the ratios changed, so you will need to input the ratio
-that you have on your modules.
-
-The PhysicalMaxTranslationSpeed and PhysicalMaxAngularVelocity is the next thing to figure out, which will require some math. These will need to be calculated 
-based on the gear ratio that your have on your drivetrain. The other two will be set based on preference, but can't be set to high as it will fail to speed up.
-
-At the end of the SwerveConstants class, there will we a whole bunch of inversions. Usually these do not have to be adjusted, but if your motors are freaking out,
-they might need to be changed, reference this page for help: https://yagsl.gitbook.io/yagsl/configuring-yagsl/when-to-invert
-
-Now you should be moving, but it may not be accurate. Tuning will require turning both PID values for drive and steering seen in ModuleConstants
+## Credits
+- Credit to The Yellow Haze (9627) for providing feedback while testing
