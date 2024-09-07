@@ -1,4 +1,3 @@
-<br />
 <h1>
     <p align="center">
         <img src="https://github.com/user-attachments/assets/72e32a4f-a451-42e7-9f9b-95c1e4606282" alt="Logo">
